@@ -1,13 +1,28 @@
-# Jane Doe
+---
+title: "Koushika Reddy Resume"
+author: "Koushika Reddy"
+date: "2025"
+---
 
-**Email:** jane.doe@example.com  
-**Phone:** +91-XXXXXXXXXX
+# 👩‍💻 Summary
+Passionate software engineering student with a focus on DevOps and CI/CD automation.
+Experienced in Jenkins, Docker, Git, and cloud technologies.
 
-## Education
-- B.Sc. Computer Science, University X (2019)
+# 🧠 Skills
+- **Programming:** Python, JavaScript, C++
+- **DevOps Tools:** Jenkins, Docker, GitHub Actions, AWS
+- **Web Technologies:** HTML, CSS, React
+- **Other:** Agile, REST APIs, CI/CD Pipelines
 
-## Skills
-- Python, Git, Jenkins, Markdown
+# 🎓 Education
+**KL University**  
+B.Tech in Computer Science and Engineering (2021–2025)
 
-## Experience
-- Intern at Company Y — Worked on automation and small services.
+# 💼 Projects
+**Auto Resume Builder**  
+- Designed a CI/CD pipeline using Jenkins to automatically convert Markdown resumes to PDF.  
+- Integrated Pandoc and LaTeX for dynamic document generation.  
+
+# 📫 Contact
+📧 koushika.reddy@example.com  
+🔗 [linkedin.com/in/koushikareddy](https://linkedin.com/in/koushikareddy)
