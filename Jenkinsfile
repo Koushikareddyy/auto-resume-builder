@@ -6,7 +6,9 @@ pipeline {
 
     options {
         // Discard old builds to save disk space, keeping only the last 10 builds.
-        buildDiscarder(logRotator(daysToKeep: '30', numToKeep: '10'))
+        // FIX: Corrected parameter names to 'daysToKeepStr' and 'numToKeepStr' 
+        // to comply with Jenkins declarative pipeline syntax.
+        buildDiscarder(logRotator(daysToKeepStr: '30', numToKeepStr: '10'))
     }
 
     stages {
