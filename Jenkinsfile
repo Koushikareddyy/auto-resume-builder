@@ -2,9 +2,7 @@ pipeline {
     agent any
 
     environment {
-        // ✅ Path to Pandoc
         PANDOC_PATH = '/opt/homebrew/bin/pandoc'
-        // ✅ Path to TinyTeX binaries (update if different)
         TINYTEX_PATH = '/Users/koushikareddysingasani/Library/TinyTeX/bin/x86_64-darwin'
         PATH = "${env.PATH}:${TINYTEX_PATH}"
     }
@@ -21,20 +19,24 @@ pipeline {
             steps {
                 echo '🛠️ Building resume using Pandoc + TinyTeX...'
                 sh '''
+                    echo "Current workspace: $(pwd)"
+                    echo "Files before build:"
+                    ls -l
                     echo "Generating resume PDF with XeLaTeX engine..."
-                    ${PANDOC_PATH} resume.md -o resume.pdf --pdf-engine=xelatex --metadata title="Koushika Reddy Resume" \
-                    -V geometry:margin=1in \
-                    -V mainfont="Helvetica" \
-                    -V fontsize=11pt \
-                    -V colorlinks=true
+                    ${PANDOC_PATH} resume.md -o resume.pdf --pdf-engine=xelatex \
+                    --metadata title="Koushika Reddy Resume" \
+                    -V geometry:margin=1in -V mainfont="Helvetica" -V fontsize=11pt -V colorlinks=true
+                    echo "Files after build:"
+                    ls -l
                 '''
             }
         }
 
         stage('Archive PDF') {
             steps {
-                echo '📦 Archiving generated PDF...'
-                archiveArtifacts artifacts: 'resume.pdf', fingerprint: true
+                echo '📦 Checking and archiving generated PDF...'
+                sh 'ls -l resume.pdf || echo "resume.pdf not found!"'
+                archiveArtifacts artifacts: 'resume.pdf', onlyIfSuccessful: true, fingerprint: true
             }
         }
     }
