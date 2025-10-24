@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        // Full path to Pandoc — adjust if your `which pandoc` gives a different path
+        // Path to your Pandoc installation (verify using: which pandoc)
         PANDOC_PATH = '/opt/homebrew/bin/pandoc'
     }
 
@@ -16,10 +16,14 @@ pipeline {
 
         stage('Build Resume') {
             steps {
-                echo '🛠️ Building resume using Pandoc...'
+                echo '🛠️ Building resume using Pandoc + wkhtmltopdf...'
                 sh '''
                     echo "Generating resume PDF..."
-                    ${PANDOC_PATH} resume.md -o resume.pdf
+                    ${PANDOC_PATH} resume.md -o resume.pdf --pdf-engine=wkhtmltopdf --metadata title="Koushika Reddy Resume" \
+                    -V geometry:margin=1in \
+                    -V mainfont="Helvetica" \
+                    -V fontsize=11pt \
+                    -V colorlinks=true
                 '''
             }
         }
