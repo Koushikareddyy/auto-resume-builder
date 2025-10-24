@@ -19,34 +19,35 @@ pipeline {
             steps {
                 echo '🛠️ Building resume using Pandoc + TinyTeX...'
                 sh '''
-                    echo "Current workspace: $(pwd)"
-                    echo "Files before build:"
-                    ls -l
-                    echo "Generating resume PDF with XeLaTeX engine..."
-                    ${PANDOC_PATH} resume.md -o resume.pdf --pdf-engine=xelatex \
-                    --metadata title="Koushika Reddy Resume" \
-                    -V geometry:margin=1in -V mainfont="Helvetica" -V fontsize=11pt -V colorlinks=true
-                    echo "Files after build:"
-                    ls -l
+                    echo "Downloading Eisvogel template..."
+                    mkdir -p templates
+                    curl -L -o templates/eisvogel.tex https://raw.githubusercontent.com/Wandmalfarbe/pandoc-latex-template/master/eisvogel.tex
+                    
+                    echo "Generating stylish resume..."
+                    ${PANDOC_PATH} resume.md -o resume.pdf --from markdown --template templates/eisvogel.tex \
+                    --pdf-engine=xelatex --listings \
+                    -V geometry:margin=1in \
+                    -V mainfont="Helvetica" \
+                    -V fontsize=11pt \
+                    -V colorlinks=true
                 '''
             }
         }
 
         stage('Archive PDF') {
             steps {
-                echo '📦 Checking and archiving generated PDF...'
-                sh 'ls -l resume.pdf || echo "resume.pdf not found!"'
-                archiveArtifacts artifacts: 'resume.pdf', onlyIfSuccessful: true, fingerprint: true
+                echo '📦 Archiving resume PDF...'
+                archiveArtifacts artifacts: 'resume.pdf', onlyIfSuccessful: true
             }
         }
     }
 
     post {
         success {
-            echo '✅ Build completed successfully — resume.pdf generated and archived!'
+            echo '✅ Resume built successfully and archived!'
         }
         failure {
-            echo '❌ Build failed. Check console output for errors.'
+            echo '❌ Build failed. Check logs.'
         }
     }
 }
