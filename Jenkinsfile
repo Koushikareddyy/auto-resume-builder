@@ -1,28 +1,32 @@
-
 pipeline {
     agent any
+
+    environment {
+        // Full path to Pandoc — adjust if your `which pandoc` gives a different path
+        PANDOC_PATH = '/opt/homebrew/bin/pandoc'
+    }
 
     stages {
         stage('Checkout') {
             steps {
-                // Pull code from GitHub
+                echo '📥 Checking out code from GitHub...'
                 git 'https://github.com/Koushikareddyy/auto-resume-builder.git'
             }
         }
 
         stage('Build Resume') {
             steps {
-                // Convert markdown to PDF
+                echo '🛠️ Building resume using Pandoc...'
                 sh '''
                     echo "Generating resume PDF..."
-                    pandoc resume.md -o resume.pdf
+                    ${PANDOC_PATH} resume.md -o resume.pdf
                 '''
             }
         }
 
         stage('Archive PDF') {
             steps {
-                // Save PDF to Jenkins artifacts
+                echo '📦 Archiving generated PDF...'
                 archiveArtifacts artifacts: 'resume.pdf', fingerprint: true
             }
         }
@@ -30,7 +34,7 @@ pipeline {
 
     post {
         success {
-            echo '✅ Build completed successfully — resume.pdf generated!'
+            echo '✅ Build completed successfully — resume.pdf generated and archived!'
         }
         failure {
             echo '❌ Build failed. Check console output for errors.'
