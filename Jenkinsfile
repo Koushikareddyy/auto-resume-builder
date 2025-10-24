@@ -16,23 +16,15 @@ pipeline {
         }
 
         stage('Build Resume') {
-            steps {
-                echo '🛠️ Building resume using Pandoc + TinyTeX...'
-                sh '''
-                    echo "Downloading Eisvogel template..."
-                    mkdir -p templates
-                    curl -L -o templates/eisvogel.tex https://raw.githubusercontent.com/Wandmalfarbe/pandoc-latex-template/master/eisvogel.tex
-                    
-                    echo "Generating stylish resume..."
-                    ${PANDOC_PATH} resume.md -o resume.pdf --from markdown --template templates/eisvogel.tex \
-                    --pdf-engine=xelatex --listings \
-                    -V geometry:margin=1in \
-                    -V mainfont="Helvetica" \
-                    -V fontsize=11pt \
-                    -V colorlinks=true
-                '''
-            }
-        }
+    steps {
+        echo '🛠️ Building resume using Pandoc + TinyTeX...'
+        sh '''
+        echo "Using local Eisvogel template..."
+        /opt/homebrew/bin/pandoc resume.md -o resume.pdf --from markdown --template templates/eisvogel.tex --pdf-engine=xelatex -V geometry:margin=1in -V mainfont=Helvetica -V fontsize=11pt -V colorlinks=true
+        '''
+    }
+}
+
 
         stage('Archive PDF') {
             steps {
