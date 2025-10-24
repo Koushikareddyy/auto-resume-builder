@@ -2,8 +2,11 @@ pipeline {
     agent any
 
     environment {
-        // Path to your Pandoc installation (verify using: which pandoc)
+        // ✅ Path to Pandoc
         PANDOC_PATH = '/opt/homebrew/bin/pandoc'
+        // ✅ Path to TinyTeX binaries (update if different)
+        TINYTEX_PATH = '/Users/koushikareddysingasani/Library/TinyTeX/bin/x86_64-darwin'
+        PATH = "${env.PATH}:${TINYTEX_PATH}"
     }
 
     stages {
@@ -16,10 +19,10 @@ pipeline {
 
         stage('Build Resume') {
             steps {
-                echo '🛠️ Building resume using Pandoc + wkhtmltopdf...'
+                echo '🛠️ Building resume using Pandoc + TinyTeX...'
                 sh '''
-                    echo "Generating resume PDF..."
-                    ${PANDOC_PATH} resume.md -o resume.pdf --pdf-engine=wkhtmltopdf --metadata title="Koushika Reddy Resume" \
+                    echo "Generating resume PDF with XeLaTeX engine..."
+                    ${PANDOC_PATH} resume.md -o resume.pdf --pdf-engine=xelatex --metadata title="Koushika Reddy Resume" \
                     -V geometry:margin=1in \
                     -V mainfont="Helvetica" \
                     -V fontsize=11pt \
